@@ -1,0 +1,41 @@
+[
+  {
+    "service": "http://192.168.86.88:80",
+    "hostname": "9router.529broo.me"
+  },
+  {
+    "service": "http://192.168.86.88:80",
+    "hostname": "cliproxy.529broo.me"
+  },
+  {
+    "service": "http://192.168.86.88:80",
+    "hostname": "knky.529broo.me"
+  },
+  {
+    "service": "http://192.168.86.88:80",
+    "hostname": "litellm.529broo.me"
+  },
+  {
+    "service": "http://192.168.86.88:80",
+    "hostname": "owui.529broo.me"
+  },
+  {
+    "service": "http://192.168.86.88:80",
+    "hostname": "plexa.529broo.me"
+  },
+  {
+    "service": "http://192.168.86.88:80",
+    "hostname": "*.529broo.me"
+  },
+  {
+    "service": "http://192.168.86.88:80",
+    "hostname": "529broo.me"
+  },
+  {
+    "service": "http://192.168.86.88:80",
+    "hostname": "comfy.529broo.me"
+  },
+  {
+    "service": "http_status:404"
+  }
+]

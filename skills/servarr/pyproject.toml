@@ -1,0 +1,23 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "servarr-mcp"
+version = "0.2.0"
+description = "servarr infrastructure control — minimal-surface code-execution bundle (library + 1-tool MCP shim)"
+requires-python = ">=3.10"
+# Core library is stdlib-only. MCP SDK is only needed for the optional shim.
+dependencies = []
+
+[project.optional-dependencies]
+mcp = ["mcp[cli]>=1.0.0"]
+
+[project.scripts]
+# Library CLI: `servarr <module> <function> [args]`
+servarr = "servarr.cli:main"
+# Optional single-tool MCP server (needs the `mcp` extra installed)
+servarr-mcp = "server:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["servarr", "server.py"]

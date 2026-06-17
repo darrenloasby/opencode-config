@@ -1,0 +1,80 @@
+{
+  "description": "",
+  "id": "c81544aef7024a7c81d21f7eb97cb684",
+  "kind": "zone",
+  "last_updated": "2026-06-12T06:22:01.341795Z",
+  "name": "default",
+  "phase": "http_request_firewall_custom",
+  "rules": [
+    {
+      "action": "skip",
+      "action_parameters": {
+        "ruleset": "current"
+      },
+      "description": "Australia-only bypass",
+      "enabled": true,
+      "expression": "ip.geoip.country eq \"AU\" or (http.host eq \"9router.529broo.me\" and ip.src in {64.6.38.192/26})",
+      "id": "511781b4e23046bbac0470dc0d1aaf88",
+      "last_updated": "2026-06-12T06:22:01.341795Z",
+      "logging": {
+        "enabled": true
+      },
+      "ref": "511781b4e23046bbac0470dc0d1aaf88",
+      "version": "5"
+    },
+    {
+      "action": "skip",
+      "action_parameters": {
+        "ruleset": "current"
+      },
+      "description": "Client Cert or Google AS Num",
+      "enabled": false,
+      "expression": "(http.host eq \"external.529broo.me\" and cf.tls_client_auth.cert_verified) or (http.host eq \"external.529broo.me\" and ip.src.asnum eq 15169) or (http.host eq \"api.529broo.me\" and starts_with(http.request.uri.path, \"/webhook\")) or (http.host eq \"api.529broo.me\" and starts_with(http.request.uri.path, \"/webhook-test\")) or (http.host eq \"api.529broo.me\" and starts_with(http.request.uri.path, \"/nodered/endpoint\")) or (http.host eq \"overseerr.529broo.me\" and ip.src.country eq \"AU\")",
+      "id": "c3ccc01eec8744988fe14070efe8c922",
+      "last_updated": "2026-05-23T00:46:04.28383Z",
+      "logging": {
+        "enabled": true
+      },
+      "ref": "c3ccc01eec8744988fe14070efe8c922",
+      "version": "3"
+    },
+    {
+      "action": "block",
+      "description": "Block",
+      "enabled": false,
+      "expression": "(http.host in {\"external.529broo.me\" \"overseerr.529broo.me\"})",
+      "id": "551859b5a7094cffa8fe310f602c9cba",
+      "last_updated": "2026-05-23T00:46:07.958638Z",
+      "ref": "551859b5a7094cffa8fe310f602c9cba",
+      "version": "3"
+    },
+    {
+      "action": "block",
+      "description": "HA Mobile - Australia Only",
+      "enabled": false,
+      "expression": "(http.host eq \"ha-mobile.529broo.me\" and ip.geoip.country ne \"AU\")",
+      "id": "46600b8e21154beab8b431bc2818bbf3",
+      "last_updated": "2026-05-23T00:46:13.991357Z",
+      "ref": "46600b8e21154beab8b431bc2818bbf3",
+      "version": "3"
+    },
+    {
+      "action": "skip",
+      "action_parameters": {
+        "ruleset": "current"
+      },
+      "description": "Bypass authentication for static assets",
+      "enabled": false,
+      "expression": "(http.host in {\"529broo.me\" \"ha.529broo.me\" \"ha-mobile.529broo.me\" \"plex.529broo.me\" \"media.529broo.me\" \"api.529broo.me\" \"overseerr.529broo.me\" \"tautulli.529broo.me\" \"sabnzbd.529broo.me\" \"qbittorrent.529broo.me\" \"radarr.529broo.me\" \"sonarr.529broo.me\" \"qbitrr.529broo.me\" \"ta.529broo.me\" \"ombi.529broo.me\" \"youtarr.529broo.me\" \"auth.529broo.me\"}) and starts_with(http.request.uri.path, \"/_assets/\")",
+      "id": "3a853bfa44f14c419500bc1c68aa4d2d",
+      "last_updated": "2026-05-23T00:46:19.189686Z",
+      "logging": {
+        "enabled": true
+      },
+      "ref": "3a853bfa44f14c419500bc1c68aa4d2d",
+      "version": "3"
+    }
+  ],
+  "source": "firewall_custom",
+  "version": "45"
+}

@@ -1,0 +1,30 @@
+{
+  "id": 50,
+  "created_on": "2026-06-04 22:48:13",
+  "modified_on": "2026-06-04 23:55:42",
+  "owner_user_id": 1,
+  "domain_names": [
+    "comfy.529broo.me"
+  ],
+  "forward_host": "192.168.86.11",
+  "forward_port": 8189,
+  "access_list_id": 0,
+  "certificate_id": 26,
+  "ssl_forced": false,
+  "caching_enabled": false,
+  "block_exploits": true,
+  "advanced_config": "proxy_set_header Host $host;\nproxy_set_header X-Real-IP $remote_addr;\nproxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\nproxy_set_header X-Forwarded-Proto $scheme;\nproxy_http_version 1.1;\nproxy_buffering off;\nproxy_read_timeout 3600s;\nproxy_send_timeout 3600s;\nclient_max_body_size 500M;\n",
+  "meta": {
+    "letsencrypt_agree": false,
+    "dns_challenge": false,
+    "nginx_online": false,
+    "nginx_err": "nginx: [warn] duplicate MIME type \"text/html\" in /data/nginx/proxy_host/17.conf:135\nnginx: [warn] duplicate MIME type \"text/html\" in /data/nginx/proxy_host/24.conf:162\nnginx: [warn] the \"listen ... http2\" directive is deprecated, use the \"http2\" directive instead in /data/nginx/proxy_host/34.conf:42\nnginx: [warn] the \"listen ... http2\" directive is deprecated, use the \"http2\" directive instead in /data/nginx/proxy_host/34.conf:43\nnginx: [emerg] \"proxy_http_version\" directive is duplicate in /data/nginx/proxy_host/50.conf:62\nnginx: configuration file /usr/local/openresty/nginx/conf/nginx.conf test failed\n"
+  },
+  "allow_websocket_upgrade": true,
+  "http2_support": true,
+  "forward_scheme": "http",
+  "enabled": true,
+  "locations": [],
+  "hsts_enabled": false,
+  "hsts_subdomains": false
+}

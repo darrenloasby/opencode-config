@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# servarr CLI wrapper — works from any directory.
+# Tries uv-installed CLI first, falls back to source in skill directory.
+set -euo pipefail
+
+SKILL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+# Prefer uv-installed CLI (fast path, always up-to-date)
+if [ -x "$HOME/.local/bin/servarr" ]; then
+  exec "$HOME/.local/bin/servarr" "$@"
+fi
+
+# Fallback: run from skill directory source
+PYTHONPATH="$SKILL_DIR${PYTHONPATH:+:$PYTHONPATH}" exec python3 -m servarr.cli "$@"

@@ -1,0 +1,8 @@
+{
+  "name": "smart-tools",
+  "description": "Enforce fast tools (fd/rg/dust) over slow disk-trawling (find/grep -r/du) and docs-first lookup, with a hard-blocking PreToolUse hook. Works across Claude Code, Codex, opencode, and any shell.",
+  "version": "1.0.0",
+  "author": {
+    "name": "dlo"
+  }
+}

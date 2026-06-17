@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# servarr-mcp wrapper — works from any directory.
+# Tries uv-installed MCP server first, falls back to source in skill directory.
+set -euo pipefail
+
+SKILL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+# Prefer uv-installed MCP server
+if [ -x "$HOME/.local/bin/servarr-mcp" ]; then
+  exec "$HOME/.local/bin/servarr-mcp" "$@"
+fi
+
+# Fallback: run from skill directory
+PYTHONPATH="$SKILL_DIR${PYTHONPATH:+:$PYTHONPATH}" exec python3 "$SKILL_DIR/server.py" "$@"
