@@ -10,8 +10,14 @@ LOG="${HOME}/.local/share/opencode/sync-config.log"
 
 mkdir -p "$(dirname "$LOG")" "$(dirname "$SKILLS_DEST")" "$(dirname "$AGENTS_DEST")"
 
-exec 3>"$LOCKFILE"
-flock -n 3 || { echo "$(date +%H:%M:%S) [SKIP] already running" >> "$LOG"; exit 0; }
+# portable lock: flock on Linux, mkdir atomic on macOS
+if command -v flock &>/dev/null; then
+  exec 3>"$LOCKFILE"
+  flock -n 3 || { echo "$(date +%H:%M:%S) [SKIP] already running" >> "$LOG"; exit 0; }
+else
+  mkdir "$LOCKFILE" 2>/dev/null || { echo "$(date +%H:%M:%S) [SKIP] already running" >> "$LOG"; exit 0; }
+  trap 'rmdir "$LOCKFILE"' EXIT
+fi
 
 log() { echo "$(date '+%Y-%m-%d %H:%M:%S') $*" >> "$LOG"; }
 HOST=$(hostname -s 2>/dev/null || hostname 2>/dev/null || echo "unknown")
