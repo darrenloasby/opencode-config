@@ -2,13 +2,13 @@
 set -euo pipefail
 
 REPO_URL="${OPCODE_SYNC_REPO:-https://github.com/darrenloasby/opencode-config.git}"
-REPO_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/opencode-config"
+REPO_DIR="${HOME}/.local/share/opencode-config-src"
 SKILLS_DEST="${HOME}/.agents/skills"
 AGENTS_DEST="${HOME}/.config/opencode/AGENTS.md"
 LOCKFILE="/tmp/sync-opencode-config.lock"
 LOG="${HOME}/.local/share/opencode/sync-config.log"
 
-mkdir -p "$(dirname "$LOG")" "$(dirname "$SKILLS_DEST")" "$(dirname "$AGENTS_DEST")"
+mkdir -p "$(dirname "$LOG")" "$(dirname "$SKILLS_DEST")" "$(dirname "$AGENTS_DEST")" "$REPO_DIR"
 
 # portable lock: flock on Linux, mkdir atomic on macOS
 if command -v flock &>/dev/null; then
@@ -23,7 +23,7 @@ log() { echo "$(date '+%Y-%m-%d %H:%M:%S') $*" >> "$LOG"; }
 HOST=$(hostname -s 2>/dev/null || hostname 2>/dev/null || echo "unknown")
 log "START host=$HOST"
 
-if [ ! -d "$REPO_DIR" ]; then
+if [ ! -d "$REPO_DIR/.git" ]; then
   git clone --depth 1 "$REPO_URL" "$REPO_DIR" >> "$LOG" 2>&1
   log "CLONE fresh copy"
 else
@@ -36,7 +36,8 @@ fi
 
 # Sync shared skills
 if [ -d "$REPO_DIR/skills" ]; then
-  rsync -a --delete --mkpath "$REPO_DIR/skills/" "$SKILLS_DEST/" >> "$LOG" 2>&1
+  mkdir -p "$SKILLS_DEST"
+  rsync -a --delete "$REPO_DIR/skills/" "$SKILLS_DEST/" >> "$LOG" 2>&1
   log "SYNC skills OK"
 fi
 
@@ -45,5 +46,29 @@ if [ -f "$REPO_DIR/AGENTS.md" ]; then
   cp "$REPO_DIR/AGENTS.md" "$AGENTS_DEST"
   log "SYNC AGENTS.md OK"
 fi
+
+# Restart opencode serve — picks up new skills/config/AGENTS.md
+case "$(uname -s)" in
+  Darwin)
+    if launchctl list ai.opencode.server &>/dev/null; then
+      launchctl kickstart -k "gui/$(id -u)/ai.opencode.server" >> "$LOG" 2>&1
+      log "RESTART opencode serve OK (launchd)"
+    else
+      log "RESTART skipped: ai.opencode.server not loaded"
+    fi
+    ;;
+  Linux)
+    restart=0
+    for unit in ai-opencode-server.service ai.opencode.server.service; do
+      if systemctl --user cat "$unit" &>/dev/null; then
+        systemctl --user restart "$unit" >> "$LOG" 2>&1
+        log "RESTART opencode serve OK (systemd: $unit)"
+        restart=1
+        break
+      fi
+    done
+    [ "$restart" = 0 ] && log "RESTART skipped: no opencode serve systemd service found"
+    ;;
+esac
 
 log "END host=$HOST"

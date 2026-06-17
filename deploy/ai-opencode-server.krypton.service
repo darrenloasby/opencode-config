@@ -1,0 +1,14 @@
+[Unit]
+Description=OpenCode Server (krypton)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/opencode serve --mdns --port 4096 --mdns-domain krypton.opencode
+Restart=always
+RestartSec=5
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+
+[Install]
+WantedBy=default.target

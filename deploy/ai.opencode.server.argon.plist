@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>ai.opencode.server</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/opt/homebrew/bin/opencode</string>
+        <string>serve</string>
+        <string>--mdns</string>
+        <string>--mdns-domain</string>
+        <string>argon.opencode</string>
+        <string>--port</string>
+        <string>4096</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+    <key>StandardOutPath</key>
+    <string>/tmp/opencode-server.log</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/opencode-server.log</string>
+    <key>WorkingDirectory</key>
+    <string>/Users/dlo</string>
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+        <key>HOME</key>
+        <string>/Users/dlo</string>
+    </dict>
+</dict>
+</plist>
