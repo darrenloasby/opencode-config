@@ -1,0 +1,85 @@
+{
+  "$schema": "https://opencode.ai",
+  "agent": {
+    "Chiron - Mentor": {
+      "mode": "primary",
+      "name": "Chiron - Mentor",
+      "model": "opencode-go/deepseek-v4-flash",
+      "options": {
+        "reasoningEffort": "high"
+      },
+      "permission": {
+        "*": "allow"
+      },
+      "steps": 100,
+      "tools": {
+        "bash": true,
+        "edit": true,
+        "glob": true,
+        "grep": true,
+        "lsp": true,
+        "read": true,
+        "task": true,
+        "todowrite": true,
+        "webfetch": true,
+        "write": true
+      }
+    },
+    "explore": {
+      "disable": true,
+      "options": {},
+      "permission": {}
+    },
+    "general": {
+      "disable": true,
+      "options": {},
+      "permission": {}
+    }
+  },
+  "default_agent": "Chiron - Mentor",
+  "disabled_providers": [
+    "anthropic"
+  ],
+  "lsp": true,
+  "mcp": {
+    "mcp-gateway": {
+      "type": "remote",
+      "url": "http://localhost:3100/mcp",
+      "enabled": true,
+      "description": "Aggregated MCP servers via gateway (brave-search, github, context7, servarr, tavily, firecrawl, stealth-fetch, media-tools, engram)"
+    }
+  },
+  "models": {
+    "opencode-go/deepseek-v4-flash": {
+      "provider": "opencode-go",
+      "enabled": true
+    },
+    "azure/gpt-4o": {
+      "provider": "azure-openai",
+      "enabled": false
+    }
+  },
+  "plugin": [
+    "@warp-dot-dev/opencode-warp@latest",
+    "@plannotator/opencode@latest",
+    "opencode-vibeguard@latest",
+    "@tarquinen/opencode-dcp@latest",
+    "@franlol/opencode-md-table-formatter@latest"
+  ],
+  "plugins": {
+    "dp": {
+      "entry": "~/.config/opencode/plugins/engram.ts",
+      "enabled": true,
+      "description": "Persistent memory via engram (host: argon.local:7437)"
+    }
+  },
+  "providers": {
+    "opencode-go": {
+      "api_key_env": "OPENCODE_GO_API_KEY",
+      "base_url": "https://opencode.ai/api"
+    },
+    "azure-openai": {
+      "api_key_env": "AZURE_OPENAI_API_KEY"
+    }
+  }
+}

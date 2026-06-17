@@ -1,0 +1,6 @@
+[Unit]
+Description=Sync opencode config from git
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/sync-opencode-config

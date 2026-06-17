@@ -1,0 +1,42 @@
+{
+  "$schema": "https://opencode.ai",
+  "agent": {
+    "default": {
+      "mode": "primary",
+      "model": "opencode-go/deepseek-v4-flash",
+      "options": {
+        "reasoningEffort": "high"
+      },
+      "permission": {
+        "*": "allow"
+      },
+      "steps": 50,
+      "tools": {
+        "bash": true,
+        "edit": true,
+        "glob": true,
+        "grep": true,
+        "lsp": true,
+        "read": true,
+        "task": true,
+        "todowrite": true,
+        "webfetch": true,
+        "write": true
+      }
+    }
+  },
+  "default_agent": "default",
+  "instructions": [
+    "You are connected to the constellation via argon's mcp-gateway.",
+    "Use the gateway for all API-backed tools (GitHub, search, servarr, etc.)."
+  ],
+  "lsp": true,
+  "mcp": {
+    "mcp-gateway": {
+      "type": "remote",
+      "url": "http://argon.local:3100/mcp",
+      "enabled": true,
+      "description": "Aggregated MCP servers via argon's gateway"
+    }
+  }
+}

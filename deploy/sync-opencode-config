@@ -1,0 +1,43 @@
+#!/bin/bash
+set -euo pipefail
+
+REPO_URL="${OPCODE_SYNC_REPO:-https://github.com/darrenloasby/opencode-config.git}"
+REPO_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/opencode-config"
+SKILLS_DEST="${HOME}/.agents/skills"
+AGENTS_DEST="${HOME}/.config/opencode/AGENTS.md"
+LOCKFILE="/tmp/sync-opencode-config.lock"
+LOG="${HOME}/.local/share/opencode/sync-config.log"
+
+mkdir -p "$(dirname "$LOG")" "$(dirname "$SKILLS_DEST")" "$(dirname "$AGENTS_DEST")"
+
+exec 3>"$LOCKFILE"
+flock -n 3 || { echo "$(date +%H:%M:%S) [SKIP] already running" >> "$LOG"; exit 0; }
+
+log() { echo "$(date '+%Y-%m-%d %H:%M:%S') $*" >> "$LOG"; }
+HOST=$(hostname -s 2>/dev/null || hostname 2>/dev/null || echo "unknown")
+log "START host=$HOST"
+
+if [ ! -d "$REPO_DIR" ]; then
+  git clone --depth 1 "$REPO_URL" "$REPO_DIR" >> "$LOG" 2>&1
+  log "CLONE fresh copy"
+else
+  cd "$REPO_DIR"
+  git fetch origin >> "$LOG" 2>&1
+  git reset --hard origin/main >> "$LOG" 2>&1
+  log "PULL latest"
+  cd /
+fi
+
+# Sync shared skills
+if [ -d "$REPO_DIR/skills" ]; then
+  rsync -a --delete --mkpath "$REPO_DIR/skills/" "$SKILLS_DEST/" >> "$LOG" 2>&1
+  log "SYNC skills OK"
+fi
+
+# Sync shared AGENTS.md
+if [ -f "$REPO_DIR/AGENTS.md" ]; then
+  cp "$REPO_DIR/AGENTS.md" "$AGENTS_DEST"
+  log "SYNC AGENTS.md OK"
+fi
+
+log "END host=$HOST"
